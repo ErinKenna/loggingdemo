@@ -1,0 +1,68 @@
+version: 1
+
+disable_existing_loggers: False
+
+formatters:
+  verbose:
+    format: '%(asctime)s [%(process)s][%(thread)s] %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  simple:
+    format: '%(asctime)s %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: simple
+    level: DEBUG
+    stream: ext://sys.stdout
+
+  debug_file_handler:
+    level: DEBUG
+    class: logging.FileHandler
+    formatter: verbose
+    filename: logs/debug.log
+    encoding: utf-8
+
+  info_file_handler:
+    level: INFO
+    class: logging.FileHandler
+    formatter: verbose
+    filename: logs/info.log
+    encoding: utf-8
+
+  error_file_handler:
+    level: ERROR
+    class: logging.FileHandler
+    formatter: verbose
+    filename: logs/errors.log
+    encoding: utf-8
+
+root:
+  handlers: [console]
+  level: NOTSET
+  propagate: yes
+  
+loggers:    
+  # Log messages from the this package
+  loggingdemo:
+    level: DEBUG
+    handlers: [debug_file_handler, info_file_handler, error_file_handler]
+    propagate: yes
+
+#  # Log messages from scripts run in this package
+#  __main__:
+#    level: INFO
+#    handlers: [info_file_handler, error_file_handler]
+#    propagate: yes
+
+  # Database connections and queries
+  sqlalchemy:
+    level: WARNING
+    handlers: [debug_file_handler, error_file_handler]
+    propagate: yes
+    
+  urllib3:
+    level: WARNING
+    handlers: [debug_file_handler, error_file_handler]
+    propagate: yes
